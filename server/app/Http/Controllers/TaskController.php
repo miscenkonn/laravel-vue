@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Http\Requests\MarkTaskCompletedRequest;
 
 class TaskController extends Controller
 {
@@ -13,15 +14,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return Task::all();
     }
 
     /**
@@ -29,7 +22,7 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        //
+        return Task::create($request->validated());
     }
 
     /**
@@ -53,7 +46,25 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        //
+        error_log($request);
+
+        $task->update($request->validated());
+
+        return $task;
+    }
+
+    /**
+     * Mark task as completed
+     */
+    public function markCompleted(MarkTaskCompletedRequest $request, $id)
+    {
+        $task = Task::findOrFail($id);
+
+        error_log($request);
+
+        $task->update($request->validated());
+
+        return $task;
     }
 
     /**
