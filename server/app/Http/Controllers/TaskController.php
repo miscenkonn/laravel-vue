@@ -24,7 +24,7 @@ class TaskController extends Controller
             $query->where('completed', '=', $completed == 'true' ? 1 : 0);
         }
 
-        return $query->paginate($limit);
+        return $query->orderBy('id', 'desc')->paginate($limit);
     }
 
     /**
