@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Requests\MarkTaskCompletedRequest;
@@ -12,9 +13,18 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Task::all();
+        $limit = $request->limit ?? 10;
+        $completed = $request->completed;
+
+        $query = Task::query();
+
+        if ($request->has('completed')) {
+            $query->where('completed', '=', $completed == 'true' ? 1 : 0);
+        }
+
+        return $query->paginate($limit);
     }
 
     /**
@@ -28,8 +38,14 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Task $task)
+    public function show($id): JsonResponse
     {
+        try {
+            return Task::findOrFail($id);
+        }
+        catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Task not found'], 404);
+        }
         //
     }
 
@@ -70,8 +86,14 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Task $task)
+    public function destroy($id)
     {
-        //
+        try {
+            $task = Task::findOrFail($id);
+            $task->delete();
+        }
+        catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Task not found'], 404);
+        }
     }
 }
