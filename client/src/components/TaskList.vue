@@ -2,8 +2,7 @@
   import store from '../storage'
   import router from '../router'
   import moment from 'moment';
-  import { onMounted, watch } from 'vue';
-  import { useRoute } from 'vue-router';
+  import { onMounted } from 'vue';
   import {apiUrl} from '../main';
 
   const filters = [
@@ -43,8 +42,8 @@
 
       if (task) {
         const response = await fetch(`${apiUrl}tasks/${id}/completed`, {method: 'PUT', body: JSON.stringify({"completed": !task.completed}), headers: {
-    'Content-Type': 'application/json'
-  }});
+          'Content-Type': 'application/json'
+        }});
 
         if (!response.ok) {
           throw new Error('Failed to update task status');
@@ -89,6 +88,8 @@
     if (completed !== null) {
       store.commit('setFilter', completed);
     }
+
+    setParams();
   });
 
   const setParams = () => {
@@ -125,7 +126,7 @@
           <h5>{{moment().format('dddd, D MMMM')}}</h5>
         </div>
       </div>
-      <div class="col-4 d-flex justify-content-end"><a href="#" class="btn btn-primary text-uppercase px-4 py-2"><b>Add new</b></a></div>
+      <div class="col-4 d-flex justify-content-end"><router-link to="/create"><a class="btn btn-primary text-uppercase px-4 py-2"><b>Add new</b></a></router-link></div>
     </div>
     <div class="row mt-5">
 

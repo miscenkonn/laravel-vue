@@ -1,7 +1,11 @@
+<script setup>
+  import CreateForm from '../components/CreateForm.vue'
+</script>
+
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <main class="container">
+    <CreateForm />
+  </main>
 </template>
 
 <style>
