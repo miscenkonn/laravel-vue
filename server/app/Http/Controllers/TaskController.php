@@ -62,8 +62,6 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        error_log($request);
-
         $task->update($request->validated());
 
         return $task;
@@ -74,11 +72,12 @@ class TaskController extends Controller
      */
     public function markCompleted(MarkTaskCompletedRequest $request, $id)
     {
-        $task = Task::findOrFail($id);
-
         error_log($request);
 
-        $task->update($request->validated());
+        $task = Task::findOrFail($id);
+        $validatedData = $request->validated();
+        $task->completed = $validatedData['completed'];
+        $task->save();
 
         return $task;
     }

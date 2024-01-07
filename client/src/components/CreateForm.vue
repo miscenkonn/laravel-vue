@@ -35,29 +35,12 @@
     }
   };
 
-  const setCompleted = async (id) => {
-    store.commit('setIsLoading', true);
-
-    try {
-      const task = store.getters.getTaskById(id);
-
-      if (task) {
-        const response = await fetch(`${apiUrl}tasks/${id}/completed`, {method: 'PUT', body: JSON.stringify({"completed": !task.completed}), headers: {
-    'Content-Type': 'application/json'
-  }});
-
-        if (!response.ok) {
-          throw new Error('Failed to update task status');
-        }
-
-        store.commit('setTaskCompleted', id, !task.completed);
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      store.commit('setIsLoading', false);
-    }
-  };
+  // const setCompleted = (taskId) => {
+  //   const taskIndex = tasks.value.findIndex((task) => task.id === taskId);
+  //   if (taskIndex !== -1) {
+  //     tasks.value[taskIndex].completed = true;
+  //   }
+  // };
 
   const deleteTask = async (id) => {
     store.commit('setIsLoading', true);
@@ -160,7 +143,7 @@
       <div class="col-12 px-5 task" :class="[task.completed ? 'task--completed' : '']" v-for="task in store.state.tasks.data">
         <div class="row align-items-center py-3">
           <div class="col-1 d-flex align-items-center justify-content-start">
-            <input type="checkbox" v-model="task.completed" @click="setCompleted(task.id)"/>
+            <input type="checkbox" v-model="task.completed"/>
           </div>
           <div class="col-10" :class="task.completed ? 'text-decoration-line-through' : ''">
             <p><b>{{ task.title }}</b> {{ task.description }}</p>

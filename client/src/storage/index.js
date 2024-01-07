@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-
+import { toRaw } from "vue";
 const store = createStore({
   state() {
     return {
@@ -17,8 +17,17 @@ const store = createStore({
       },
     };
   },
+  getters: {
+    getTaskById: (state) => (id) => {
+      return toRaw(state.tasks.data.find((task) => task.id === id));
+    },
+  },
   mutations: {
     setTasks(state, data, totalCount) {
+      for (let task of data) {
+        task.completed = task.completed === 1;
+      }
+
       state.tasks.data = data;
       state.tasks.totalCount = totalCount;
     },
@@ -29,18 +38,14 @@ const store = createStore({
       state.tasks.paging.filters.completed = completed;
     },
     setLinks(state, links) {
-      let formattedLinks = [];
-
       for (let link of links) {
         if (link.url) {
           link.url = new URL(link.url);
           link.url = link.url.searchParams.get("page");
         }
-
-        formattedLinks.push(link);
       }
 
-      state.tasks.paging.links = formattedLinks;
+      state.tasks.paging.links = links;
     },
     setTaskCompleted(state, id, completed) {
       const task = state.tasks.data.find((t) => t.id === id);
