@@ -72,8 +72,6 @@ class TaskController extends Controller
      */
     public function markCompleted(MarkTaskCompletedRequest $request, $id)
     {
-        error_log($request);
-
         $task = Task::findOrFail($id);
         $validatedData = $request->validated();
         $task->completed = $validatedData['completed'];

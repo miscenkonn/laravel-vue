@@ -3,7 +3,7 @@
   import router from '../router'
   import moment from 'moment';
   import { onMounted } from 'vue';
-  import { apiUrl, toastPosition } from '../common';
+  import { apiUrl, toastPosition } from '../common/constants';
   import { useToast } from 'vue-toast-notification';
 
   const toast = useToast();
@@ -198,15 +198,17 @@
 </template>
 
 <style scoped>
-a {
-  text-decoration: none;
-  cursor: pointer;
-}
+  a {
+    text-decoration: none;
+    cursor: pointer;
+  }
+
   input[type="checkbox"] {
     width: 24px;
     height: 24px;
     cursor: pointer;
   }
+  
   p {
     margin: 0
   }
