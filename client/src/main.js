@@ -7,6 +7,8 @@ import App from "./App.vue";
 import store from "./storage";
 import router from "./router";
 
+export const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
 const app = createApp(App);
 
 app.use(store);

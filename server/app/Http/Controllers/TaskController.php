@@ -15,7 +15,7 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        $limit = $request->limit ?? 10;
+        $limit = 10;
         $completed = $request->completed;
 
         $query = Task::query();
@@ -38,7 +38,7 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id): JsonResponse
+    public function show($id)
     {
         try {
             return Task::findOrFail($id);
@@ -91,6 +91,7 @@ class TaskController extends Controller
         try {
             $task = Task::findOrFail($id);
             $task->delete();
+            return response()->json(['message' => 'Deleted successfully'], 200);
         }
         catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Task not found'], 404);
