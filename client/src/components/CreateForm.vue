@@ -1,16 +1,17 @@
 <script setup>
   import store from '../storage'
   import { onMounted, ref } from 'vue';
-  import {apiUrl} from '../main';
-  import moment from 'moment';
+  import { apiUrl, toastPosition } from '../common';
+  import { useToast } from 'vue-toast-notification';
 
+  const toast = useToast();
   const title = ref('');
   const description = ref('');
 
   const createTask = async (e) => {
     e.preventDefault();
     if (!title.value.trim()) {
-      console.log('Enter title');
+      toast.open({message: 'Provide title for your task', type: 'warning', position: toastPosition});
       return;
     }
 
@@ -33,8 +34,10 @@
       title.value = '';
       description.value = '';
 
+      toast.open({message: 'Task created', type: 'warning', position: toastPosition});
     } catch (error) {
       console.error(error);
+      toast.open({message: error, type: 'error', position: toastPosition});
     } finally {
       store.commit('setIsLoading', false);
     }

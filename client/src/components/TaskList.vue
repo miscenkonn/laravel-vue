@@ -3,7 +3,10 @@
   import router from '../router'
   import moment from 'moment';
   import { onMounted } from 'vue';
-  import {apiUrl} from '../main';
+  import { apiUrl, toastPosition } from '../common';
+  import { useToast } from 'vue-toast-notification';
+
+  const toast = useToast();
 
   const filters = [
     { label: 'All', value: null },
@@ -29,15 +32,16 @@
       store.commit('setLinks', links);
     } catch (error) {
       console.error(error);
+      toast.open({message: error, type: 'error', position: toastPosition});
     } finally {
       store.commit('setIsLoading', false);
     }
   };
 
   const setCompleted = async (id) => {
-    store.commit('setIsLoading', true);
-
     try {
+      document.body.style.cursor='wait';
+
       const task = store.getters.getTaskById(id);
 
       if (task) {
@@ -49,30 +53,37 @@
           throw new Error('Failed to update task status');
         }
 
-        store.commit('setTaskCompleted', id, !task.completed);
+        toast.open({message: 'Task updated', type: 'success', position: toastPosition});
       }
     } catch (error) {
       console.error(error);
+      toast.open({message: error, type: 'error', position: toastPosition});
     } finally {
-      store.commit('setIsLoading', false);
+      document.body.style.cursor='default';
     }
   };
 
   const deleteTask = async (id) => {
-    store.commit('setIsLoading', true);
+    var result = confirm("Delete this task?");
+    
+    if (result) {
+      store.commit('setIsLoading', true);
 
-    try {
-      const response = await fetch(`${apiUrl}tasks/${id}`, {method: 'DELETE'});
+      try {
+        const response = await fetch(`${apiUrl}tasks/${id}`, {method: 'DELETE'});
 
-      if (!response.ok) {
-        throw new Error('Failed to delete task');
+        if (!response.ok) {
+          throw new Error('Failed to delete task');
+        }
+        toast.open({message: 'Task deleted', type: 'success', position: toastPosition});
+        
+        await fetchTasks();
+      } catch (error) {
+        console.error(error);
+        toast.open({message: error, type: 'error', position: toastPosition});
+      } finally {
+        store.commit('setIsLoading', false);
       }
-      
-      await fetchTasks();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      store.commit('setIsLoading', false);
     }
   };
 
@@ -132,7 +143,7 @@
 
       <!-- Loading State -->
 
-      <div v-if="store.state.tasks.isLoading" class="text-center" style="margin-top: 250px;">
+      <div v-if="store.state.tasks.isLoading" class="text-center" style="margin-top: 250px; height: 720px;">
         <div class="spinner-border" role="status"></div>
       </div>
 

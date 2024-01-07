@@ -47,8 +47,8 @@ const store = createStore({
 
       state.tasks.paging.links = links;
     },
-    setTaskCompleted(state, id, completed) {
-      const task = state.tasks.data.find((t) => t.id === id);
+    setTaskCompleted(state, { id, completed }) {
+      const task = toRaw(state.tasks.data.find((t) => t.id === id));
 
       if (task) {
         task.completed = completed;
