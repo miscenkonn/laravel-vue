@@ -9,5 +9,5 @@
 - php artisan migrate --seed
 - php artisan serve
 
-#### php.ini
+#### add this to php.ini
     variables_order = "GPCS"
