@@ -3,7 +3,7 @@
 - cd client
 - npm install
 - npm run dev
-    api url is located in .env file
+- change api url in .env file
 
 #### server
 - cd server
