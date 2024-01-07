@@ -2,8 +2,8 @@
 
 - cd client
 - npm install
+- update api url in .env file
 - npm run dev
-- change api url in .env file
 
 #### server
 - cd server
