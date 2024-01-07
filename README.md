@@ -1,20 +1,13 @@
-#client
-##cd client
-##npm install
-##npm run dev
+##### client
 
-server
-  cd server
-  php artisan migrate --seed
-  php artisan serve
+- cd client
+- npm install
+- npm run dev
 
-  php.ini
-    extension=mysqli
-    allow_url_fopen = On
-    extension_dir = "ext"
-    extension=curl
-    extension=mbstring
-    extension=openssl
-    extension=fileinfo
-    extension=pdo_mysql
+#### server
+- cd server
+- php artisan migrate --seed
+- php artisan serve
+
+#### php.ini
     variables_order = "GPCS"
